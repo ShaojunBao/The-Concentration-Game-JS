@@ -40,6 +40,7 @@ function createBoard(){
     for(let i=0; i<cardsValuePickList.length; i++){
         const card = document.createElement('div');
         card.classList.add('card');
+        card.dataset.value = cardsValuePickList[i];
 
         const img = document.createElement('img');
         img.src = 'imags/face.png';
@@ -97,10 +98,9 @@ function flipCard(card) {
     card.classList.add('flipped');
 
     const img = card.querySelector('img');
+    // Set the src to card's value
     img.src = card.dataset.value;
-  
-    card.classList.add('flipped');
-  
+    
     // Add the flipped card to the flippedCards array
     flippedCards.push(card);
   
@@ -128,6 +128,9 @@ function flipCard(card) {
       setTimeout(() => {
         card1.classList.remove('flipped');
         card2.classList.remove('flipped');
+        //Change the img back to defalut img
+        img1.src = 'imags/face.png';
+        img2.src = 'imags/face.png';
       }, 1000);
     }
   

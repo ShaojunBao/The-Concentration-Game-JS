@@ -51,3 +51,7 @@ button {
     background-color: black;
     color: white;
   }
+
+  .flipped {
+    border: 2px solid red;
+  }
