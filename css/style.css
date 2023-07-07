@@ -55,3 +55,8 @@ button {
   .flipped {
     border: 2px solid red;
   }
+
+  .matched {
+    background-color: #00FF00; 
+    pointer-events: none; 
+}
