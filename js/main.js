@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
 // constants:
 const cardsValue = [
     'imags/bacon.png',
@@ -11,6 +10,7 @@ const cardsValue = [
     'imags/rice.png',
 ]
 
+const cardsValuePickList = [...cardsValue,...cardsValue];
 // app's state (variables)
 let cards = [];
 let flippedCards = [];
@@ -26,21 +26,24 @@ resetBtn.addEventListener('click',stopGame);
 
 
 //Initialize the game
-
+startGame();
 
 
 // Function to create the game board
 function createBoard(){
     const deck = document.querySelector('.deck');
 
+    // reset the current cards to prevent duplicate images
+    deck.innerHTML = '';
+
     //Generate the card deck 
-    for(let i=0; i<cardsValue.length; i++){
+    for(let i=0; i<cardsValuePickList.length; i++){
         const card = document.createElement('div');
         card.classList.add('card');
 
         const img = document.createElement('img');
-        img.src = 'images/face.png';
-        img.alt = 'Deafult image';
+        img.src = 'imags/face.png';
+        img.alt = 'Default image';
 
         card.appendChild(img);
         deck.appendChild(card);
@@ -48,8 +51,17 @@ function createBoard(){
     }
 }
 
-// Function to shuffle the card values
-
+// Function to shuffle the card values using Fisher-Yates algorithm
+function shuffle(arry){
+    let currentIdx = arry.length, randomIdx, temporary;
+    while(--currentIdx < 0){
+        randomIdx = Math.floor(Math.random()*(currentIdx+1));
+        temporary = arry[randomIdx];
+        arry[randomIdx] = arry[currentIdx];
+        arry[currentIdx] = temporary;
+    }
+    return arry;
+}
 
 //Function to start the game
 
@@ -58,8 +70,70 @@ function startGame(){
     flippedCards = [];
     matchedCards = [];
 
+    let shuffled = shuffle(cardsValuePickList);
+
     createBoard();
+
+    //Assign the shuffled value to the cards
+    for(let i = 0; i<cardsValuePickList.length; i++){
+        const img = cards[i].querySelector('img');
+        img.src = shuffled[i];
+    }
+
+    //Add OnClick event listener to every card.
+    for (let card of cards) {
+        card.addEventListener('click', function(){
+        flipCard(card);
+      });
+    }
 }
+
+//Function to flip the card 
+function flipCard(card) {
+    console.log(card);
+    if (card.classList.contains('flipped') || card.classList.contains('matched')) {
+      return;
+    }
+    card.classList.add('flipped');
+
+    const img = card.querySelector('img');
+    img.src = card.dataset.value;
+  
+    card.classList.add('flipped');
+  
+    // Add the flipped card to the flippedCards array
+    flippedCards.push(card);
+  
+    if (flippedCards.length === 2) {
+      // Two cards are flipped, check for a match
+      checkForMatch();
+    }
+  }
+
+  //Function to match the card
+  function checkForMatch() {
+    const card1 = flippedCards[0];
+    const card2 = flippedCards[1];
+  
+    const img1 = card1.querySelector('img');
+    const img2 = card2.querySelector('img');
+  
+    if (img1.src === img2.src) {
+      // The cards are a match
+      card1.classList.add('matched');
+      card2.classList.add('matched');
+      matchedCards.push(card1, card2);
+    } else {
+      // The cards are not a match
+      setTimeout(() => {
+        card1.classList.remove('flipped');
+        card2.classList.remove('flipped');
+      }, 1000);
+    }
+  
+    // Clear the flippedCards array
+    flippedCards = [];
+  }
 
 //Function to stop the game
 function stopGame(){
@@ -68,4 +142,3 @@ function stopGame(){
 
     createBoard();
 }
-});
