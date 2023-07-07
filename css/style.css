@@ -60,3 +60,15 @@ button {
     background-color: #00FF00; 
     pointer-events: none; 
 }
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* Add space between the panel and the game deck */
+}
+
+#timer, #move-counter {
+  font-size: 20px;
+  margin-bottom: 10px;
+}

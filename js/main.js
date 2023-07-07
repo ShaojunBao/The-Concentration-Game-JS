@@ -14,10 +14,17 @@ const cardsValue = [
 let cards = [];
 let flippedCards = [];
 let matchedCards = [];
+let gameStarted = false;
+let time = 0;
+let moveCount = 0;
+let timerId = null;
+
 
 // cached element references:
 const startBtn = document.getElementById('startBtn');
 const stopBtn = document.getElementById('stopBtn');
+const timeDisplay = document.getElementById('timer');
+const moveCountDisplay = document.getElementById('move-counter');
 
 // event listeners:
 startBtn.addEventListener('click',startGame);
@@ -69,6 +76,11 @@ function startGame(){
     // Reset the game 
     flippedCards = [];
     matchedCards = [];
+    gameStarted = false;
+    moveCount = 0;
+    time = 0;
+    timeDisplay.textContent = "Time: 0s";
+    moveCountDisplay.textContent = "Moves: 0";
 
     let cardsValuePickList = [...cardsValue,...cardsValue];
     let shuffled = shuffle(cardsValuePickList);
@@ -85,10 +97,18 @@ function startGame(){
 
 //Function to flip the card 
 function flipCard(card) {
+  //Start the time when the first card is fliped
+    if(!gameStarted){
+      gameStarted = true;
+      startTimer();
+    }
+
+    //Ensure the flipped card and matched cards cannot be refliped.
     if (card.classList.contains('flipped') || card.classList.contains('matched')) {
       return;
     }
     card.classList.add('flipped');
+    
 
     const img = card.querySelector('img');
     // Set the src to card's value
@@ -98,9 +118,21 @@ function flipCard(card) {
     flippedCards.push(card);
   
     if (flippedCards.length === 2) {
-      // Two cards are flipped, check for a match
+      // Count to the Moves when flip 2 cards
+      moveCount++;
+      moveCountDisplay.textContent = `Moves: ${moveCount}`;
+      
+      disableCardFlipping(true);
+      
+      setTimeout(() =>{
+        // Two cards are flipped, check for a match
       checkForMatch();
+      //enable card flipping after delay
+      disableCardFlipping(false);
+      },1000);
+      
     }
+
   }
 
   //Function to match the card
@@ -132,13 +164,39 @@ function flipCard(card) {
     flippedCards = [];
   }
 
+  //Function to start the timer
+  function startTimer(){
+    timerId = setInterval(() =>{
+      time++;
+      timeDisplay.textContent = `Time: ${time}s`;
+    }, 1000);
+  }
+
+  //Function to reset the timer
+  function stopTimer(){
+    clearInterval(timerId);
+  }
+
 //Function to stop the game
 function stopGame(){
     flippedCards = [];
     matchedCards = [];
-
+    stopTimer();
     let cardsValuePickList = [...cardsValue,...cardsValue];
     let shuffled = shuffle(cardsValuePickList);
 
     createBoard(shuffled);
+}
+
+//Function to disable or enable card flipping
+function disableCardFlipping(disable){
+  for(let card of cards){
+    card.removeEventListener('click',flipCard);
+    if(disable){
+      card.style.pointerEvents = 'none';
+    } else{
+      card.addEventListener('click',flipCard);
+      card.style.pointerEvents = 'auto'
+    }
+  }
 }
