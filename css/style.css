@@ -1,74 +1,93 @@
-body{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+body {
+  display: flex;
+  font-family: 'Tangerine', serif;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: linear-gradient(to bottom right, #FFE53B, #FF2525);
 }
 
-.container{
-    display:flex;
-    align-items: center;
-    flex-direction: column;
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.deck{
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    grid-gap: 10px;   
+.deck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
 }
-
 
 .card {
-    width: 100px;
-    height: 100px;
-    background-color: #f2f2f2;
-    border: 1vmin solid #f2f2f2;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .card img {
-    max-width: 100%;
-    max-height: 100%;
-  }
+  width: 100px;
+  height: 100px;
+  background-color: #f2f2f2;
+  border: 1vmin solid #f2f2f2;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.card img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
 button {
-    justify-self: center;
-    width: 15vmin;
-    margin: 2vmin;
-    background-color: white;
-    color: black;
-    border: 1vmin solid black;
-    border-radius: 4vmin;
-    font-size: 4vmin;
-    outline: none;
-  }
-  
-  button:hover {
-    background-color: black;
-    color: white;
-  }
+  justify-self: center;
+  width: 15vmin;
+  margin: 2vmin;
+  background-color: white;
+  color: black;
+  border: 1vmin solid black;
+  border-radius: 4vmin;
+  font-size: 4vmin;
+  outline: none;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
 
-  .flipped {
-    border: 2px solid red;
-  }
+button:hover {
+  background-color: black;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-  .matched {
-    background-color: #00FF00; 
-    pointer-events: none; 
+.flipped {
+  border: 2px solid red;
+}
+
+.matched {
+  background-color: #00FF00;
+  pointer-events: none;
 }
 
 .side-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; /* Add space between the panel and the game deck */
+  margin-bottom: 20px;
 }
 
-#timer, #move-counter {
+#timer,
+#move-counter {
   font-size: 20px;
   margin-bottom: 10px;
+}
+
+.statusCheck {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: white;
 }
